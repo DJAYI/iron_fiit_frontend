@@ -4,8 +4,8 @@ import { TrainingService } from '../../../shared/services/training.service';
 import { Client, TrainingPlan } from '../../../shared/interfaces';
 
 @Component({
-    selector: 'app-trainer-dashboard',
-    template: `
+  selector: 'app-trainer-dashboard',
+  template: `
     <div class="space-y-6">
       <h1 class="text-3xl font-bold text-gray-900">Panel del Entrenador</h1>
 
@@ -46,40 +46,40 @@ import { Client, TrainingPlan } from '../../../shared/interfaces';
   `
 })
 export class TrainerDashboardComponent implements OnInit {
-    private userService = inject(UserService);
-    private trainingService = inject(TrainingService);
+  private userService = inject(UserService);
+  private trainingService = inject(TrainingService);
 
-    clients = signal<Client[]>([]);
-    trainingPlans = signal<TrainingPlan[]>([]);
-    routines = signal<any[]>([]);
+  clients = signal<Client[]>([]);
+  trainingPlans = signal<TrainingPlan[]>([]);
+  routines = signal<any[]>([]);
 
-    ngOnInit() {
-        this.loadData();
-    }
+  ngOnInit() {
+    this.loadData();
+  }
 
-    loadData() {
-        this.userService.getMyClients().subscribe({
-            next: (response) => {
-                if (!response.error && response.data) {
-                    this.clients.set(response.data);
-                }
-            }
-        });
+  loadData() {
+    this.userService.getMyClients().subscribe({
+      next: (response) => {
+        if (response.data) {
+          this.clients.set(response.data);
+        }
+      }
+    });
 
-        this.trainingService.getMyTrainingPlans().subscribe({
-            next: (response) => {
-                if (!response.error && response.data) {
-                    this.trainingPlans.set(response.data);
-                }
-            }
-        });
+    this.trainingService.getMyTrainingPlans().subscribe({
+      next: (response) => {
+        if (response.data) {
+          this.trainingPlans.set(response.data);
+        }
+      }
+    });
 
-        this.trainingService.getTrainerRoutines().subscribe({
-            next: (response) => {
-                if (!response.error && response.data) {
-                    this.routines.set(response.data);
-                }
-            }
-        });
-    }
+    this.trainingService.getTrainerRoutines().subscribe({
+      next: (response) => {
+        if (response.data) {
+          this.routines.set(response.data);
+        }
+      }
+    });
+  }
 }

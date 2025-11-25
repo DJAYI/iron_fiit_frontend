@@ -3,8 +3,8 @@ import { TrainingService } from '../../../../shared/services/training.service';
 import { TrainingPlan } from '../../../../shared/interfaces';
 
 @Component({
-    selector: 'app-plan-list',
-    template: `
+  selector: 'app-plan-list',
+  template: `
     <div class="space-y-6">
       <h1 class="text-3xl font-bold text-gray-900">Mis Planes de Entrenamiento</h1>
 
@@ -55,31 +55,31 @@ import { TrainingPlan } from '../../../../shared/interfaces';
   `
 })
 export class PlanListComponent implements OnInit {
-    private trainingService = inject(TrainingService);
+  private trainingService = inject(TrainingService);
 
-    plans = signal<TrainingPlan[]>([]);
-    loading = signal(true);
+  plans = signal<TrainingPlan[]>([]);
+  loading = signal(true);
 
-    ngOnInit() {
-        this.loadPlans();
-    }
+  ngOnInit() {
+    this.loadPlans();
+  }
 
-    loadPlans() {
-        this.trainingService.getMyTrainingPlans().subscribe({
-            next: (response) => {
-                if (!response.error && response.data) {
-                    this.plans.set(response.data);
-                }
-                this.loading.set(false);
-            },
-            error: () => {
-                this.loading.set(false);
-            }
-        });
-    }
+  loadPlans() {
+    this.trainingService.getMyTrainingPlans().subscribe({
+      next: (response) => {
+        if (response.data) {
+          this.plans.set(response.data);
+        }
+        this.loading.set(false);
+      },
+      error: () => {
+        this.loading.set(false);
+      }
+    });
+  }
 
-    getStatusClass(status: string): string {
-        const baseClasses = 'px-3 py-1 rounded-full text-sm font-semibold ';
-        return baseClasses + 'bg-blue-100 text-blue-800';
-    }
+  getStatusClass(status: string): string {
+    const baseClasses = 'px-3 py-1 rounded-full text-sm font-semibold ';
+    return baseClasses + 'bg-blue-100 text-blue-800';
+  }
 }

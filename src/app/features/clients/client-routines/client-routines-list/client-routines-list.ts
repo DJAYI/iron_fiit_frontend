@@ -3,8 +3,8 @@ import { TrainingService } from '../../../../shared/services/training.service';
 import { Routine } from '../../../../shared/interfaces';
 
 @Component({
-    selector: 'app-client-routines-list',
-    template: `
+  selector: 'app-client-routines-list',
+  template: `
     <div class="space-y-6">
       <h1 class="text-3xl font-bold text-gray-900">Mis Rutinas</h1>
 
@@ -43,26 +43,26 @@ import { Routine } from '../../../../shared/interfaces';
   `
 })
 export class ClientRoutinesListComponent implements OnInit {
-    private trainingService = inject(TrainingService);
+  private trainingService = inject(TrainingService);
 
-    routines = signal<Routine[]>([]);
-    loading = signal(true);
+  routines = signal<Routine[]>([]);
+  loading = signal(true);
 
-    ngOnInit() {
-        this.loadRoutines();
-    }
+  ngOnInit() {
+    this.loadRoutines();
+  }
 
-    loadRoutines() {
-        this.trainingService.getMyRoutines().subscribe({
-            next: (response) => {
-                if (!response.error && response.data) {
-                    this.routines.set(response.data);
-                }
-                this.loading.set(false);
-            },
-            error: () => {
-                this.loading.set(false);
-            }
-        });
-    }
+  loadRoutines() {
+    this.trainingService.getMyRoutines().subscribe({
+      next: (response) => {
+        if (response.data) {
+          this.routines.set(response.data);
+        }
+        this.loading.set(false);
+      },
+      error: () => {
+        this.loading.set(false);
+      }
+    });
+  }
 }

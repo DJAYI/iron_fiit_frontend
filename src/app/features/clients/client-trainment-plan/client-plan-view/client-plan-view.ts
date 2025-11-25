@@ -3,8 +3,8 @@ import { TrainingService } from '../../../../shared/services/training.service';
 import { TrainingPlan } from '../../../../shared/interfaces';
 
 @Component({
-    selector: 'app-client-plan-view',
-    template: `
+  selector: 'app-client-plan-view',
+  template: `
     <div class="space-y-6">
       <h1 class="text-3xl font-bold text-gray-900">Mi Plan de Entrenamiento</h1>
 
@@ -57,26 +57,26 @@ import { TrainingPlan } from '../../../../shared/interfaces';
   `
 })
 export class ClientPlanViewComponent implements OnInit {
-    private trainingService = inject(TrainingService);
+  private trainingService = inject(TrainingService);
 
-    plan = signal<TrainingPlan | null>(null);
-    loading = signal(true);
+  plan = signal<TrainingPlan | null>(null);
+  loading = signal(true);
 
-    ngOnInit() {
-        this.loadPlan();
-    }
+  ngOnInit() {
+    this.loadPlan();
+  }
 
-    loadPlan() {
-        this.trainingService.getMyActiveTrainingPlan().subscribe({
-            next: (response) => {
-                if (!response.error && response.data) {
-                    this.plan.set(response.data);
-                }
-                this.loading.set(false);
-            },
-            error: () => {
-                this.loading.set(false);
-            }
-        });
-    }
+  loadPlan() {
+    this.trainingService.getMyActiveTrainingPlan().subscribe({
+      next: (response) => {
+        if (response.data) {
+          this.plan.set(response.data);
+        }
+        this.loading.set(false);
+      },
+      error: () => {
+        this.loading.set(false);
+      }
+    });
+  }
 }

@@ -5,8 +5,8 @@ import { EvaluationService } from '../../../shared/services/evaluation.service';
 import { Client, TrainingPlan, PhysicalEvaluation } from '../../../shared/interfaces';
 
 @Component({
-    selector: 'app-client-dashboard',
-    template: `
+  selector: 'app-client-dashboard',
+  template: `
     <div class="space-y-6">
       <h1 class="text-3xl font-bold text-gray-900">Mi Panel</h1>
 
@@ -75,41 +75,41 @@ import { Client, TrainingPlan, PhysicalEvaluation } from '../../../shared/interf
   `
 })
 export class ClientDashboardComponent implements OnInit {
-    private userService = inject(UserService);
-    private trainingService = inject(TrainingService);
-    private evaluationService = inject(EvaluationService);
+  private userService = inject(UserService);
+  private trainingService = inject(TrainingService);
+  private evaluationService = inject(EvaluationService);
 
-    profile = signal<Client | null>(null);
-    activePlan = signal<TrainingPlan | null>(null);
-    lastEvaluation = signal<PhysicalEvaluation | null>(null);
+  profile = signal<Client | null>(null);
+  activePlan = signal<TrainingPlan | null>(null);
+  lastEvaluation = signal<PhysicalEvaluation | null>(null);
 
-    ngOnInit() {
-        this.loadData();
-    }
+  ngOnInit() {
+    this.loadData();
+  }
 
-    loadData() {
-        this.userService.getClientProfile().subscribe({
-            next: (response) => {
-                if (!response.error && response.data) {
-                    this.profile.set(response.data);
-                }
-            }
-        });
+  loadData() {
+    this.userService.getClientProfile().subscribe({
+      next: (response) => {
+        if (!response.error && response.data) {
+          this.profile.set(response.data);
+        }
+      }
+    });
 
-        this.trainingService.getMyActiveTrainingPlan().subscribe({
-            next: (response) => {
-                if (!response.error && response.data) {
-                    this.activePlan.set(response.data);
-                }
-            }
-        });
+    this.trainingService.getMyActiveTrainingPlan().subscribe({
+      next: (response) => {
+        if (response.data) {
+          this.activePlan.set(response.data);
+        }
+      }
+    });
 
-        this.evaluationService.getMyEvaluations().subscribe({
-            next: (response) => {
-                if (!response.error && response.data && response.data.length > 0) {
-                    this.lastEvaluation.set(response.data[0]);
-                }
-            }
-        });
-    }
+    this.evaluationService.getMyEvaluations().subscribe({
+      next: (response) => {
+        if (!response.error && response.data && response.data.length > 0) {
+          this.lastEvaluation.set(response.data[0]);
+        }
+      }
+    });
+  }
 }
