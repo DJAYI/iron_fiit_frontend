@@ -13,10 +13,14 @@ import {
     RoutinesListResponse,
     RoutineResponse,
     ObjectivesListResponse,
-    StatesListResponse
-} from '../interfaces';
-
-@Injectable({
+    StatesListResponse,
+    CreateObjectiveRequest,
+    UpdateObjectiveRequest,
+    CreateStateRequest,
+    UpdateStateRequest,
+    ObjectiveResponse,
+    StateResponse
+} from '../interfaces'; @Injectable({
     providedIn: 'root'
 })
 export class TrainingService {
@@ -91,7 +95,23 @@ export class TrainingService {
         return this.api.get<ObjectivesListResponse>('/api/trainment-plan/objectives');
     }
 
+    createObjective(data: CreateObjectiveRequest): Observable<ObjectiveResponse> {
+        return this.api.post<ObjectiveResponse>('/api/trainment-plan/objectives', data);
+    }
+
+    updateObjective(id: number, data: UpdateObjectiveRequest): Observable<ObjectiveResponse> {
+        return this.api.put<ObjectiveResponse>(`/api/trainment-plan/objectives/${id}`, data);
+    }
+
     getAllStates(): Observable<StatesListResponse> {
         return this.api.get<StatesListResponse>('/api/trainment-plan/states');
+    }
+
+    createState(data: CreateStateRequest): Observable<StateResponse> {
+        return this.api.post<StateResponse>('/api/trainment-plan/states', data);
+    }
+
+    updateState(id: number, data: UpdateStateRequest): Observable<StateResponse> {
+        return this.api.put<StateResponse>(`/api/trainment-plan/states/${id}`, data);
     }
 }

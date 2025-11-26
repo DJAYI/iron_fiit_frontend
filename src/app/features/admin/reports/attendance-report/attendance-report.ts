@@ -5,8 +5,8 @@ import { Attendance, AttendanceStatus, Client } from '../../../../shared/interfa
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
-    selector: 'app-attendance-report',
-    template: `
+  selector: 'app-attendance-report',
+  template: `
     <div class="space-y-6">
       <h1 class="text-3xl font-bold text-gray-900">Reporte de Asistencia</h1>
 
@@ -66,9 +66,9 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
             <tbody class="bg-white divide-y divide-gray-200">
               @for (attendance of attendances(); track attendance.id) {
                 <tr>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm">{{ attendance.clientName }}</td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm">{{ attendance.date }}</td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm">{{ attendance.time }}</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm">{{ getClientName(attendance.clientId) }}</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm">{{ formatDate(attendance.dateTime) }}</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm">{{ formatTime(attendance.dateTime) }}</td>
                   <td class="px-6 py-4 whitespace-nowrap">
                     <span [class]="getStatusClass(attendance.status)">
                       {{ getStatusLabel(attendance.status) }}
@@ -90,83 +90,105 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
       }
     </div>
   `,
-    imports: [ReactiveFormsModule]
+  imports: [ReactiveFormsModule]
 })
 export class AttendanceReportComponent implements OnInit {
-    private reportService = inject(ReportService);
-    private userService = inject(UserService);
+  private reportService = inject(ReportService);
+  private userService = inject(UserService);
 
-    attendances = signal<Attendance[]>([]);
-    clients = signal<Client[]>([]);
-    loading = signal(false);
+  attendances = signal<Attendance[]>([]);
+  clients = signal<Client[]>([]);
+  loading = signal(false);
 
-    filterForm = new FormGroup({
-        startDate: new FormControl<string | null>(null),
-        endDate: new FormControl<string | null>(null),
-        clientId: new FormControl<number | null>(null),
-        status: new FormControl<AttendanceStatus | null>(null)
+  filterForm = new FormGroup({
+    startDate: new FormControl<string | null>(null),
+    endDate: new FormControl<string | null>(null),
+    clientId: new FormControl<number | null>(null),
+    status: new FormControl<AttendanceStatus | null>(null)
+  });
+
+  ngOnInit() {
+    this.loadClients();
+  }
+
+  loadClients() {
+    this.userService.getAllClients().subscribe({
+      next: (response) => {
+        if (response.clients) {
+          this.clients.set(response.clients);
+        }
+      }
     });
+  }
 
-    ngOnInit() {
-        this.loadClients();
-    }
+  loadReport() {
+    this.loading.set(true);
+    const filters = this.filterForm.value;
 
-    loadClients() {
-        this.userService.getAllClients().subscribe({
-            next: (response) => {
-                if (response.clients) {
-                    this.clients.set(response.clients);
-                }
-            }
-        });
-    }
-
-    loadReport() {
-        this.loading.set(true);
-        const filters = this.filterForm.value;
-
-        this.reportService.getAttendanceReport({
-            startDate: filters.startDate || undefined,
-            endDate: filters.endDate || undefined,
-            clientId: filters.clientId || undefined,
-            status: filters.status || undefined
-        }).subscribe({
-            next: (response) => {
-                if (!response.error && response.data) {
-                    this.attendances.set(response.data);
-                }
-                this.loading.set(false);
-            },
-            error: () => {
-                this.loading.set(false);
-            }
-        });
-    }
-
-    getStatusClass(status: AttendanceStatus): string {
-        const classes = 'px-2 py-1 text-xs font-semibold rounded-full ';
-        switch (status) {
-            case 'ATTENDED':
-                return classes + 'bg-green-100 text-green-800';
-            case 'NOT_ATTENDED':
-                return classes + 'bg-red-100 text-red-800';
-            case 'ATTENDED_NO_ROUTINE':
-                return classes + 'bg-yellow-100 text-yellow-800';
-            default:
-                return classes + 'bg-gray-100 text-gray-800';
+    this.reportService.getAttendanceReport({
+      startDate: filters.startDate || undefined,
+      endDate: filters.endDate || undefined,
+      clientId: filters.clientId || undefined,
+      status: filters.status || undefined
+    }).subscribe({
+      next: (response) => {
+        if (!response.error && response.data) {
+          this.attendances.set(response.data);
         }
-    }
+        this.loading.set(false);
+      },
+      error: () => {
+        this.loading.set(false);
+      }
+    });
+  }
 
-    getStatusLabel(status: AttendanceStatus): string {
-        switch (status) {
-            case 'ATTENDED':
-                return 'Asistió';
-            case 'NOT_ATTENDED':
-                return 'No Asistió';
-            case 'ATTENDED_NO_ROUTINE':
-                return 'Asistió sin Rutina';
-            default:
-                return status;
-        }
+  getStatusClass(status: AttendanceStatus): string {
+    const classes = 'px-2 py-1 text-xs font-semibold rounded-full ';
+    switch (status) {
+      case 'ATTENDED':
+        return classes + 'bg-green-100 text-green-800';
+      case 'NOT_ATTENDED':
+        return classes + 'bg-red-100 text-red-800';
+      case 'ATTENDED_NO_ROUTINE':
+        return classes + 'bg-yellow-100 text-yellow-800';
+      default:
+        return classes + 'bg-gray-100 text-gray-800';
     }
+  }
+
+  getStatusLabel(status: AttendanceStatus): string {
+    switch (status) {
+      case 'ATTENDED':
+        return 'Asistió';
+      case 'NOT_ATTENDED':
+        return 'No Asistió';
+      case 'ATTENDED_NO_ROUTINE':
+        return 'Asistió sin Rutina';
+      default:
+        return status;
+    }
+  }
+
+  getClientName(clientId: number): string {
+    const client = this.clients().find(c => c.id === clientId);
+    return client ? `${client.firstName} ${client.lastName}` : `Cliente #${clientId}`;
+  }
+
+  formatDate(dateTime: string): string {
+    const date = new Date(dateTime);
+    return date.toLocaleDateString('es-ES', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
+    });
+  }
+
+  formatTime(dateTime: string): string {
+    const date = new Date(dateTime);
+    return date.toLocaleTimeString('es-ES', {
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  }
 }

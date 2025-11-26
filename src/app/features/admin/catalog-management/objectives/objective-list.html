@@ -1,0 +1,38 @@
+<div class="objective-list-container">
+    <div class="header">
+        <h2>Objetivos de Planes de Entrenamiento</h2>
+        <button (click)="onCreate()" class="btn-primary">Crear Objetivo</button>
+    </div>
+
+    @if (loading()) {
+    <div class="loading">Cargando objetivos...</div>
+    } @else {
+    @if (objectives().length === 0) {
+    <div class="empty-state">
+        <p>No hay objetivos registrados</p>
+        <button (click)="onCreate()" class="btn-primary">Crear Primer Objetivo</button>
+    </div>
+    } @else {
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (objective of objectives(); track objective.id) {
+            <tr>
+                <td>{{ objective.id }}</td>
+                <td>{{ objective.name }}</td>
+                <td>
+                    <button (click)="onEdit(objective.id)" class="btn-secondary">Editar</button>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+    }
+    }
+</div>

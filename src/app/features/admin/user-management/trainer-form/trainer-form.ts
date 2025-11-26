@@ -128,7 +128,7 @@ export class TrainerFormComponent implements OnInit {
     this.loading.set(true);
     this.userService.getAllTrainers().subscribe({
       next: (response) => {
-        const trainer = response.trainers.find(t => t.id === id);
+        const trainer = response.trainers.find(t => t.trainerId === id);
         if (trainer) {
           this.trainerForm.patchValue({
             firstName: trainer.firstName,

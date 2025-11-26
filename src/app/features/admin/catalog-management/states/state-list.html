@@ -1,0 +1,38 @@
+<div class="state-list-container">
+    <div class="header">
+        <h2>Estados de Planes de Entrenamiento</h2>
+        <button (click)="onCreate()" class="btn-primary">Crear Estado</button>
+    </div>
+
+    @if (loading()) {
+    <div class="loading">Cargando estados...</div>
+    } @else {
+    @if (states().length === 0) {
+    <div class="empty-state">
+        <p>No hay estados registrados</p>
+        <button (click)="onCreate()" class="btn-primary">Crear Primer Estado</button>
+    </div>
+    } @else {
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (state of states(); track state.id) {
+            <tr>
+                <td>{{ state.id }}</td>
+                <td>{{ state.name }}</td>
+                <td>
+                    <button (click)="onEdit(state.id)" class="btn-secondary">Editar</button>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+    }
+    }
+</div>

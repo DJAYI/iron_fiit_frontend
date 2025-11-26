@@ -5,8 +5,8 @@ import { NotificationService } from '../../../../shared/services/notification.se
 import { Trainer } from '../../../../shared/interfaces';
 
 @Component({
-    selector: 'app-trainer-list',
-    template: `
+  selector: 'app-trainer-list',
+  template: `
     <div class="space-y-6">
       <div class="flex justify-between items-center">
         <h1 class="text-3xl font-bold text-gray-900">Gestión de Entrenadores</h1>
@@ -40,7 +40,7 @@ import { Trainer } from '../../../../shared/interfaces';
               </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
-              @for(trainer of trainers(); track trainer.id) {
+              @for(trainer of trainers(); track trainer.trainerId) {
                 <tr class="hover:bg-gray-50">
                   <td class="px-6 py-4 whitespace-nowrap">
                     <div class="text-sm font-medium text-gray-900">{{ trainer.firstName }} {{ trainer.lastName }}</div>
@@ -55,10 +55,10 @@ import { Trainer } from '../../../../shared/interfaces';
                     <div class="text-sm text-gray-500">{{ trainer.username }}</div>
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <a [routerLink]="['/admin/users/trainers/edit', trainer.id]" class="text-orange-600 hover:text-orange-900 mr-4">
+                    <a [routerLink]="['/admin/users/trainers/edit', trainer.trainerId]" class="text-orange-600 hover:text-orange-900 mr-4">
                       Editar
                     </a>
-                    <a [routerLink]="['/admin/users/trainers', trainer.id]" class="text-blue-600 hover:text-blue-900">
+                    <a [routerLink]="['/admin/users/trainers', trainer.trainerId]" class="text-blue-600 hover:text-blue-900">
                       Ver
                     </a>
                   </td>
@@ -70,30 +70,30 @@ import { Trainer } from '../../../../shared/interfaces';
       }
     </div>
   `,
-    imports: [RouterLink]
+  imports: [RouterLink]
 })
 export class TrainerListComponent implements OnInit {
-    private userService = inject(UserService);
-    private notificationService = inject(NotificationService);
+  private userService = inject(UserService);
+  private notificationService = inject(NotificationService);
 
-    trainers = signal<Trainer[]>([]);
-    loading = signal(false);
+  trainers = signal<Trainer[]>([]);
+  loading = signal(false);
 
-    ngOnInit() {
-        this.loadTrainers();
-    }
+  ngOnInit() {
+    this.loadTrainers();
+  }
 
-    loadTrainers() {
-        this.loading.set(true);
-        this.userService.getAllTrainers().subscribe({
-            next: (response) => {
-                this.trainers.set(response.trainers);
-                this.loading.set(false);
-            },
-            error: () => {
-                this.notificationService.error('Error al cargar los entrenadores');
-                this.loading.set(false);
-            }
-        });
-    }
+  loadTrainers() {
+    this.loading.set(true);
+    this.userService.getAllTrainers().subscribe({
+      next: (response) => {
+        this.trainers.set(response.trainers);
+        this.loading.set(false);
+      },
+      error: () => {
+        this.notificationService.error('Error al cargar los entrenadores');
+        this.loading.set(false);
+      }
+    });
+  }
 }

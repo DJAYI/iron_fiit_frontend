@@ -3,12 +3,31 @@ export type AttendanceStatus = 'ATTENDED' | 'NOT_ATTENDED' | 'ATTENDED_NO_ROUTIN
 export interface Attendance {
     id: number;
     clientId: number;
-    clientName: string;
-    date: string;
-    time: string;
+    dateTime: string;
     status: AttendanceStatus;
     completed: boolean;
-    observations: string;
+    observations: string | null;
+    sessionId: number | null;
+}
+
+export interface AttendanceListResponse {
+    attendances: Attendance[];
+    message: string;
+}
+
+export interface AttendanceResponse {
+    attendance: Attendance;
+    message: string;
+}
+
+export interface RegisterAttendanceRequest {
+    status: AttendanceStatus;
+    observations?: string;
+}
+
+export interface MarkCompletedRequest {
+    attendanceId: number;
+    completed: boolean;
 }
 
 export interface ClientCompliance {

@@ -65,8 +65,8 @@ import { Client, Trainer, TrainingPlanObjective, TrainingPlanState } from '../..
                             formControlName="trainerId"
                             class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent">
                             <option value="">Selecciona un entrenador</option>
-                            @for (trainer of trainers(); track trainer.id) {
-                                <option [value]="trainer.id">{{ trainer.firstName }} {{ trainer.lastName }}</option>
+                            @for (trainer of trainers(); track trainer.trainerId) {
+                                <option [value]="trainer.trainerId">{{ trainer.firstName }} {{ trainer.lastName }}</option>
                             }
                         </select>
                         @if (planForm.get('trainerId')?.invalid && planForm.get('trainerId')?.touched) {
@@ -198,7 +198,13 @@ export class TrainingPlanFormComponent implements OnInit {
 
   loadTrainers() {
     this.userService.getAllTrainers().subscribe({
-      next: (response) => this.trainers.set(response.trainers),
+      next: (response) => {
+        console.log('Trainers response:', response);
+        if (response.trainers) {
+          this.trainers.set(response.trainers);
+          console.log('Trainers loaded:', response.trainers);
+        }
+      },
       error: (err) => console.error('Error loading trainers:', err)
     });
   }
@@ -212,7 +218,7 @@ export class TrainingPlanFormComponent implements OnInit {
 
   loadStates() {
     this.trainingService.getAllStates().subscribe({
-      next: (response) => this.states.set(response.trainmentStates),
+      next: (response) => this.states.set(response.trainmentObjectives),
       error: (err) => console.error('Error loading states:', err)
     });
   }
@@ -246,25 +252,58 @@ export class TrainingPlanFormComponent implements OnInit {
     this.loading.set(true);
     const formValue = this.planForm.value;
 
+    // Debug: ver qué valores vienen del formulario
+    console.log('Form values:', formValue);
+
+    // Validar que los valores no sean strings vacías o 'undefined'
+    if (!formValue.clientId || formValue.clientId === '' || formValue.clientId === 'undefined') {
+      alert('Por favor selecciona un cliente');
+      this.loading.set(false);
+      return;
+    }
+    if (!formValue.trainerId || formValue.trainerId === '' || formValue.trainerId === 'undefined') {
+      alert('Por favor selecciona un entrenador');
+      this.loading.set(false);
+      return;
+    }
+    if (!formValue.objectiveId || formValue.objectiveId === '' || formValue.objectiveId === 'undefined') {
+      alert('Por favor selecciona un objetivo');
+      this.loading.set(false);
+      return;
+    }
+    if (!formValue.stateId || formValue.stateId === '' || formValue.stateId === 'undefined') {
+      alert('Por favor selecciona un estado');
+      this.loading.set(false);
+      return;
+    }
+
+    // Convertir a números
+    const clientId = Number(formValue.clientId);
+    const trainerId = Number(formValue.trainerId);
+    const objectiveId = Number(formValue.objectiveId);
+    const stateId = Number(formValue.stateId);
+
+    console.log('Converted values:', { clientId, trainerId, objectiveId, stateId });
+
     const request = this.isEditMode()
       ? this.trainingService.updateTrainingPlan({
         id: this.planId!,
         name: formValue.name,
         description: formValue.description,
-        clientId: parseInt(formValue.clientId, 10),
-        trainerId: parseInt(formValue.trainerId, 10),
-        objectiveId: parseInt(formValue.objectiveId, 10),
-        stateId: parseInt(formValue.stateId, 10),
+        clientId: clientId,
+        trainerId: trainerId,
+        objectiveId: objectiveId,
+        stateId: stateId,
         startDate: formValue.startDate,
         endDate: formValue.endDate
       })
       : this.trainingService.createTrainingPlan({
         name: formValue.name,
         description: formValue.description,
-        clientId: parseInt(formValue.clientId, 10),
-        trainerId: parseInt(formValue.trainerId, 10),
-        objectiveId: parseInt(formValue.objectiveId, 10),
-        stateId: parseInt(formValue.stateId, 10),
+        clientId: clientId,
+        trainerId: trainerId,
+        objectiveId: objectiveId,
+        stateId: stateId,
         startDate: formValue.startDate,
         endDate: formValue.endDate
       });

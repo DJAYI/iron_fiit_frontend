@@ -53,7 +53,7 @@ export interface Client {
 }
 
 export interface Trainer {
-    id: number;
+    trainerId: number;
     firstName: string;
     lastName: string;
     documentType: DocumentType;

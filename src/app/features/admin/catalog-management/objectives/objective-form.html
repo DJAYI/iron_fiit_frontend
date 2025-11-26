@@ -1,0 +1,24 @@
+<div class="objective-form-container">
+    <div class="header">
+        <h2>{{ isEditMode() ? 'Editar Objetivo' : 'Crear Objetivo' }}</h2>
+    </div>
+
+    <form [formGroup]="objectiveForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+            <label for="name">Nombre *</label>
+            <input type="text" id="name" formControlName="name" placeholder="Ingrese el nombre del objetivo" />
+            @if (objectiveForm.get('name')?.invalid && objectiveForm.get('name')?.touched) {
+            <span class="error">El nombre es requerido y debe tener al menos 3 caracteres</span>
+            }
+        </div>
+
+        <div class="form-actions">
+            <button type="button" (click)="onCancel()" class="btn-secondary" [disabled]="loading()">
+                Cancelar
+            </button>
+            <button type="submit" class="btn-primary" [disabled]="objectiveForm.invalid || loading()">
+                {{ loading() ? 'Guardando...' : (isEditMode() ? 'Actualizar' : 'Crear') }}
+            </button>
+        </div>
+    </form>
+</div>

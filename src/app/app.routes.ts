@@ -95,6 +95,24 @@ export const routes: Routes = [
                 path: 'catalog/exercises/edit/:id',
                 loadComponent: () => import('./features/admin/catalog-management/exercises/exercise-form/exercise-form').then(m => m.ExerciseFormComponent)
             },
+            // Catálogos - Objetivos de Planes de Entrenamiento
+            {
+                path: 'catalog/objectives',
+                loadComponent: () => import('./features/admin/catalog-management/objectives/objective-list').then(m => m.ObjectiveListComponent)
+            },
+            {
+                path: 'catalog/objectives/form',
+                loadComponent: () => import('./features/admin/catalog-management/objectives/objective-form').then(m => m.ObjectiveFormComponent)
+            },
+            // Catálogos - Estados de Planes de Entrenamiento
+            {
+                path: 'catalog/states',
+                loadComponent: () => import('./features/admin/catalog-management/states/state-list').then(m => m.StateListComponent)
+            },
+            {
+                path: 'catalog/states/form',
+                loadComponent: () => import('./features/admin/catalog-management/states/state-form').then(m => m.StateFormComponent)
+            },
             // Planes y Rutinas
             {
                 path: 'routines/training-plans',
@@ -163,6 +181,10 @@ export const routes: Routes = [
                 loadComponent: () => import('./features/trainers/trainer-routines/routine-list/routine-list').then(m => m.RoutineListComponent)
             },
             {
+                path: 'attendance',
+                loadComponent: () => import('./features/trainers/attendance/trainer-attendance/trainer-attendance').then(m => m.TrainerAttendanceComponent)
+            },
+            {
                 path: '',
                 redirectTo: 'dashboard',
                 pathMatch: 'full'
@@ -194,6 +216,10 @@ export const routes: Routes = [
             {
                 path: 'progress',
                 loadComponent: () => import('./features/clients/client-progress/client-progress-view/client-progress-view').then(m => m.ClientProgressViewComponent)
+            },
+            {
+                path: 'attendance',
+                loadComponent: () => import('./features/clients/client-attendance/client-attendance').then(m => m.ClientAttendanceComponent)
             },
             {
                 path: '',

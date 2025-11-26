@@ -81,13 +81,29 @@ export interface RoutineResponse {
 export interface TrainingPlanObjective {
     id: number;
     name: string;
-    description: string;
+}
+
+export interface CreateObjectiveRequest {
+    name: string;
+}
+
+export interface UpdateObjectiveRequest {
+    id: number;
+    name: string;
 }
 
 export interface TrainingPlanState {
     id: number;
     name: string;
-    description: string;
+}
+
+export interface CreateStateRequest {
+    name: string;
+}
+
+export interface UpdateStateRequest {
+    id: number;
+    name: string;
 }
 
 export interface ObjectivesListResponse {
@@ -95,7 +111,17 @@ export interface ObjectivesListResponse {
     message: string;
 }
 
+export interface ObjectiveResponse {
+    trainmentObjective: TrainingPlanObjective;
+    message: string;
+}
+
 export interface StatesListResponse {
-    trainmentStates: TrainingPlanState[];
+    trainmentObjectives: TrainingPlanState[];
+    message: string;
+}
+
+export interface StateResponse {
+    trainmentState: TrainingPlanState;
     message: string;
 }
