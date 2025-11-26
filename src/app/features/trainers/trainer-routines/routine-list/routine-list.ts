@@ -1,4 +1,5 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
+import { Router } from '@angular/router';
 import { TrainingService } from '../../../../shared/services/training.service';
 import { Routine } from '../../../../shared/interfaces';
 
@@ -23,6 +24,17 @@ import { Routine } from '../../../../shared/interfaces';
                   <span class="font-medium">Plan:</span> {{ routine.trainmentPlanName }}
                 </p>
               </div>
+              <div class="mt-4 flex space-x-2">
+                <button
+                  (click)="manageExercises(routine.id)"
+                  class="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center space-x-2"
+                >
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                  </svg>
+                  <span>Gestionar Ejercicios</span>
+                </button>
+              </div>
             </div>
           }
         </div>
@@ -36,6 +48,7 @@ import { Routine } from '../../../../shared/interfaces';
 })
 export class RoutineListComponent implements OnInit {
   private trainingService = inject(TrainingService);
+  private router = inject(Router);
 
   routines = signal<Routine[]>([]);
   loading = signal(true);
@@ -56,5 +69,9 @@ export class RoutineListComponent implements OnInit {
         this.loading.set(false);
       }
     });
+  }
+
+  manageExercises(routineId: number) {
+    this.router.navigate(['/trainer/routines', routineId, 'exercises']);
   }
 }

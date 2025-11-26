@@ -29,7 +29,7 @@ export class TrainerAttendanceComponent implements OnInit {
         today.setHours(0, 0, 0, 0);
 
         return this.attendances().filter(a => {
-            const date = new Date(a.dateTime);
+            const date = new Date(a.date);
             date.setHours(0, 0, 0, 0);
             return date.getTime() === today.getTime();
         }).length;
@@ -43,43 +43,28 @@ export class TrainerAttendanceComponent implements OnInit {
         this.loading.set(true);
         this.attendanceService.getAllAttendances().subscribe({
             next: (response) => {
-                this.attendances.set(response.attendances);
+                this.attendances.set(response.data || []);
                 this.loading.set(false);
             },
             error: (error) => {
                 console.error('Error loading attendances:', error);
                 this.notificationService.error('Error al cargar las asistencias');
+                this.attendances.set([]);
                 this.loading.set(false);
             }
         });
     }
 
-    formatDateTime(dateTime: string): string {
-        const date = new Date(dateTime);
-        return date.toLocaleString('es-ES', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-        });
+    formatDate(date: string): string {
+        // date is in format "2025-11-26"
+        const [year, month, day] = date.split('-');
+        return `${day}/${month}/${year}`;
     }
 
-    formatDate(dateTime: string): string {
-        const date = new Date(dateTime);
-        return date.toLocaleDateString('es-ES', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        });
-    }
-
-    formatTime(dateTime: string): string {
-        const date = new Date(dateTime);
-        return date.toLocaleTimeString('es-ES', {
-            hour: '2-digit',
-            minute: '2-digit'
-        });
+    formatTime(time: string): string {
+        // time is in format "14:13:19.494882" or "14:13:19"
+        const [hour, minute] = time.split(':');
+        return `${hour}:${minute}`;
     }
 
     toggleCompleted(attendance: Attendance): void {

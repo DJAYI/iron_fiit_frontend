@@ -33,7 +33,7 @@ export class ClientAttendanceComponent implements OnInit {
         const currentYear = today.getFullYear();
 
         return this.attendances().filter(a => {
-            const date = new Date(a.dateTime);
+            const date = new Date(a.date);
             return date.getMonth() === currentMonth && date.getFullYear() === currentYear;
         }).length;
     });
@@ -45,7 +45,7 @@ export class ClientAttendanceComponent implements OnInit {
         weekStart.setHours(0, 0, 0, 0);
 
         return this.attendances().filter(a => {
-            const attendanceDate = new Date(a.dateTime);
+            const attendanceDate = new Date(a.date);
             return attendanceDate >= weekStart;
         }).length;
     });
@@ -58,12 +58,13 @@ export class ClientAttendanceComponent implements OnInit {
         this.loading.set(true);
         this.attendanceService.getMyAttendances().subscribe({
             next: (response) => {
-                this.attendances.set(response.attendances);
+                this.attendances.set(response.data || []);
                 this.loading.set(false);
             },
             error: (error) => {
                 console.error('Error loading attendances:', error);
                 this.notificationService.error('Error al cargar las asistencias');
+                this.attendances.set([]);
                 this.loading.set(false);
             }
         });
@@ -122,40 +123,34 @@ export class ClientAttendanceComponent implements OnInit {
         return classes[status];
     }
 
-    formatDateTime(dateTime: string): string {
-        const date = new Date(dateTime);
-        return date.toLocaleString('es-ES', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-        });
-    }
-
-    formatDate(dateTime: string): string {
-        const date = new Date(dateTime);
-        return date.toLocaleDateString('es-ES', {
+    formatDate(date: string): string {
+        // date format: "2025-11-26"
+        const [year, month, day] = date.split('-');
+        const dateObj = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+        return dateObj.toLocaleDateString('es-ES', {
             year: 'numeric',
             month: 'long',
             day: 'numeric'
         });
     }
 
-    formatTime(dateTime: string): string {
-        const date = new Date(dateTime);
-        return date.toLocaleTimeString('es-ES', {
-            hour: '2-digit',
-            minute: '2-digit'
-        });
+    formatTime(time: string): string {
+        // time format: "14:13:19.494882"
+        const [hours, minutes] = time.split(':');
+        return `${hours}:${minutes}`;
     }
 
     getTodayAttendance(): Attendance | undefined {
+        const attendances = this.attendances();
+        if (!attendances || attendances.length === 0) {
+            return undefined;
+        }
+
         const today = new Date();
         today.setHours(0, 0, 0, 0);
 
-        return this.attendances().find(attendance => {
-            const attendanceDate = new Date(attendance.dateTime);
+        return attendances.find(attendance => {
+            const attendanceDate = new Date(attendance.date);
             attendanceDate.setHours(0, 0, 0, 0);
             return attendanceDate.getTime() === today.getTime();
         });

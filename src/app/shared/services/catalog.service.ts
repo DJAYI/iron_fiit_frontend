@@ -14,6 +14,11 @@ export class CatalogService {
         return this.api.get<ExercisesListResponse>('/api/exercises');
     }
 
+    // Alias for better readability
+    getExercises(): Observable<ExercisesListResponse> {
+        return this.getAllExercises();
+    }
+
     getExercise(id: number): Observable<ExerciseResponse> {
         return this.api.get<ExerciseResponse>(`/api/exercises/${id}`);
     }

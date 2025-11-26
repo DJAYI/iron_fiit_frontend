@@ -125,3 +125,48 @@ export interface StateResponse {
     trainmentState: TrainingPlanState;
     message: string;
 }
+
+export interface RoutineExercise {
+    id: number;
+    routineId: number;
+    routineName: string;
+    exerciseId: number;
+    exerciseName: string;
+    order: number;
+    sets: number;
+    reps: number;
+    timeSeconds: number | null;
+    restSeconds: number;
+    targetWeight: number | null;
+}
+
+export interface CreateRoutineExerciseRequest {
+    routineId: number;
+    exerciseId: number;
+    order: number;
+    sets: number;
+    reps: number;
+    timeSeconds?: number | null;
+    restSeconds: number;
+    targetWeight?: number | null;
+}
+
+export interface UpdateRoutineExerciseRequest {
+    id: number;
+    order?: number;
+    sets?: number;
+    reps?: number;
+    timeSeconds?: number | null;
+    restSeconds?: number;
+    targetWeight?: number | null;
+}
+
+export interface RoutineExercisesListResponse {
+    data: RoutineExercise[];
+    message: string;
+}
+
+export interface RoutineExerciseResponse {
+    data: RoutineExercise;
+    message: string;
+}

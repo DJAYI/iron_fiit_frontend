@@ -48,6 +48,22 @@ import { Routine } from '../../../../shared/interfaces';
                             
                             <div class="flex gap-2">
                                 <button 
+                                    (click)="manageExercises(routine.id)"
+                                    class="flex-1 bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded-lg text-sm transition-colors flex items-center justify-center gap-1">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                                    </svg>
+                                    Ejercicios
+                                </button>
+                                <button 
+                                    (click)="manageSessions(routine.id)"
+                                    class="flex-1 bg-purple-600 hover:bg-purple-700 text-white px-3 py-2 rounded-lg text-sm transition-colors flex items-center justify-center gap-1">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                    Sesiones
+                                </button>
+                                <button 
                                     (click)="editRoutine(routine.id)"
                                     class="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg text-sm transition-colors">
                                     Editar
@@ -141,5 +157,13 @@ export class RoutineListComponent implements OnInit {
 
   editRoutine(id: number) {
     this.router.navigate(['/admin/routines/routines/edit', id]);
+  }
+
+  manageExercises(routineId: number) {
+    this.router.navigate(['/admin/routines/routines', routineId, 'exercises']);
+  }
+
+  manageSessions(routineId: number) {
+    this.router.navigate(['/admin/routines/routines', routineId, 'sessions']);
   }
 }

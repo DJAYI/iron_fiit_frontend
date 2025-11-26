@@ -138,6 +138,14 @@ export const routes: Routes = [
                 path: 'routines/routines/edit/:id',
                 loadComponent: () => import('./features/admin/routines-management/routine-form/routine-form').then(m => m.RoutineFormComponent)
             },
+            {
+                path: 'routines/routines/:id/exercises',
+                loadComponent: () => import('./features/trainers/trainer-routines/routine-exercises/routine-exercises').then(m => m.RoutineExercisesComponent)
+            },
+            {
+                path: 'routines/routines/:id/sessions',
+                loadComponent: () => import('./features/admin/routines-management/session-management/session-management').then(m => m.SessionManagementComponent)
+            },
             // Reportes
             {
                 path: 'reports/attendance',
@@ -179,6 +187,10 @@ export const routes: Routes = [
             {
                 path: 'routines',
                 loadComponent: () => import('./features/trainers/trainer-routines/routine-list/routine-list').then(m => m.RoutineListComponent)
+            },
+            {
+                path: 'routines/:id/exercises',
+                loadComponent: () => import('./features/trainers/trainer-routines/routine-exercises/routine-exercises').then(m => m.RoutineExercisesComponent)
             },
             {
                 path: 'attendance',

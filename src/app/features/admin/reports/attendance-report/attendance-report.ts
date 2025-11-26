@@ -66,9 +66,9 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
             <tbody class="bg-white divide-y divide-gray-200">
               @for (attendance of attendances(); track attendance.id) {
                 <tr>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm">{{ getClientName(attendance.clientId) }}</td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm">{{ formatDate(attendance.dateTime) }}</td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm">{{ formatTime(attendance.dateTime) }}</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm">{{ attendance.clientName }}</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm">{{ formatDate(attendance.date) }}</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm">{{ formatTime(attendance.time) }}</td>
                   <td class="px-6 py-4 whitespace-nowrap">
                     <span [class]="getStatusClass(attendance.status)">
                       {{ getStatusLabel(attendance.status) }}
@@ -112,7 +112,7 @@ export class AttendanceReportComponent implements OnInit {
   }
 
   loadClients() {
-    this.userService.getAllClients().subscribe({
+    this.userService.getClients().subscribe({
       next: (response) => {
         if (response.clients) {
           this.clients.set(response.clients);
@@ -170,25 +170,15 @@ export class AttendanceReportComponent implements OnInit {
     }
   }
 
-  getClientName(clientId: number): string {
-    const client = this.clients().find(c => c.id === clientId);
-    return client ? `${client.firstName} ${client.lastName}` : `Cliente #${clientId}`;
+  formatDate(date: string): string {
+    // date is in format "2025-11-26"
+    const [year, month, day] = date.split('-');
+    return `${day}/${month}/${year}`;
   }
 
-  formatDate(dateTime: string): string {
-    const date = new Date(dateTime);
-    return date.toLocaleDateString('es-ES', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit'
-    });
-  }
-
-  formatTime(dateTime: string): string {
-    const date = new Date(dateTime);
-    return date.toLocaleTimeString('es-ES', {
-      hour: '2-digit',
-      minute: '2-digit'
-    });
+  formatTime(time: string): string {
+    // time is in format "14:13:19.494882" or "14:13:19"
+    const [hour, minute] = time.split(':');
+    return `${hour}:${minute}`;
   }
 }

@@ -3,6 +3,18 @@ export type AttendanceStatus = 'ATTENDED' | 'NOT_ATTENDED' | 'ATTENDED_NO_ROUTIN
 export interface Attendance {
     id: number;
     clientId: number;
+    clientName: string;
+    date: string;
+    time: string;
+    status: AttendanceStatus;
+    completed: boolean;
+    observations: string | null;
+}
+
+// API response format (raw from backend)
+export interface AttendanceApiResponse {
+    id: number;
+    clientId: number;
     dateTime: string;
     status: AttendanceStatus;
     completed: boolean;
@@ -11,7 +23,14 @@ export interface Attendance {
 }
 
 export interface AttendanceListResponse {
-    attendances: Attendance[];
+    data: Attendance[];
+    count: number;
+    message: string;
+}
+
+// API response format (raw from backend)
+export interface AttendanceListApiResponse {
+    attendances: AttendanceApiResponse[];
     message: string;
 }
 
