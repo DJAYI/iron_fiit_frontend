@@ -64,8 +64,8 @@ import { Client, TrainingPlan, PhysicalEvaluation } from '../../../shared/interf
               <p class="text-2xl font-bold text-gray-900">{{ lastEvaluation()!.bodyFatPercentage }}%</p>
             </div>
             <div class="text-center p-3 bg-gray-50 rounded">
-              <p class="text-sm text-gray-600">Masa Muscular</p>
-              <p class="text-2xl font-bold text-gray-900">{{ lastEvaluation()!.muscleMass }} kg</p>
+              <p class="text-sm text-gray-600">Cintura</p>
+              <p class="text-2xl font-bold text-gray-900">{{ lastEvaluation()!.waistMeasurement }} cm</p>
             </div>
           </div>
           <p class="mt-4 text-sm text-gray-500">Fecha: {{ lastEvaluation()!.evaluationDate }}</p>

@@ -3,8 +3,8 @@ import { EvaluationService } from '../../../../shared/services/evaluation.servic
 import { PhysicalEvaluation } from '../../../../shared/interfaces';
 
 @Component({
-    selector: 'app-client-progress-view',
-    template: `
+  selector: 'app-client-progress-view',
+  template: `
     <div class="space-y-6">
       <h1 class="text-3xl font-bold text-gray-900">Mi Progreso</h1>
 
@@ -18,7 +18,6 @@ import { PhysicalEvaluation } from '../../../../shared/interfaces';
             <div class="bg-white rounded-lg shadow p-6">
               <div class="flex justify-between items-start mb-4">
                 <h3 class="text-lg font-semibold text-gray-900">Evaluación del {{ evaluation.evaluationDate }}</h3>
-                <span class="text-sm text-gray-500">Por: {{ evaluation.trainerName }}</span>
               </div>
 
               <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -38,17 +37,22 @@ import { PhysicalEvaluation } from '../../../../shared/interfaces';
                 </div>
 
                 <div class="text-center p-4 bg-purple-50 rounded-lg">
-                  <p class="text-sm text-gray-600 mb-1">Masa Muscular</p>
-                  <p class="text-2xl font-bold text-purple-600">{{ evaluation.muscleMass }} kg</p>
+                  <p class="text-sm text-gray-600 mb-1">Cintura</p>
+                  <p class="text-2xl font-bold text-purple-600">{{ evaluation.waistMeasurement }} cm</p>
                 </div>
               </div>
 
-              @if (evaluation.measurements) {
-                <div class="mt-4 p-4 bg-gray-50 rounded-lg">
-                  <p class="text-sm font-medium text-gray-700 mb-2">Medidas</p>
-                  <p class="text-gray-600">{{ evaluation.measurements }}</p>
+              <div class="grid grid-cols-2 gap-4 mt-4">
+                <div class="text-center p-4 bg-pink-50 rounded-lg">
+                  <p class="text-sm text-gray-600 mb-1">Cadera</p>
+                  <p class="text-2xl font-bold text-pink-600">{{ evaluation.hipMeasurement }} cm</p>
                 </div>
-              }
+
+                <div class="text-center p-4 bg-indigo-50 rounded-lg">
+                  <p class="text-sm text-gray-600 mb-1">Altura</p>
+                  <p class="text-2xl font-bold text-indigo-600">{{ evaluation.heightMeasurement }} cm</p>
+                </div>
+              </div>
 
               @if (evaluation.notes) {
                 <div class="mt-4 p-4 bg-gray-50 rounded-lg">
@@ -72,26 +76,26 @@ import { PhysicalEvaluation } from '../../../../shared/interfaces';
   `
 })
 export class ClientProgressViewComponent implements OnInit {
-    private evaluationService = inject(EvaluationService);
+  private evaluationService = inject(EvaluationService);
 
-    evaluations = signal<PhysicalEvaluation[]>([]);
-    loading = signal(true);
+  evaluations = signal<PhysicalEvaluation[]>([]);
+  loading = signal(true);
 
-    ngOnInit() {
-        this.loadEvaluations();
-    }
+  ngOnInit() {
+    this.loadEvaluations();
+  }
 
-    loadEvaluations() {
-        this.evaluationService.getMyEvaluations().subscribe({
-            next: (response) => {
-                if (!response.error && response.data) {
-                    this.evaluations.set(response.data);
-                }
-                this.loading.set(false);
-            },
-            error: () => {
-                this.loading.set(false);
-            }
-        });
-    }
+  loadEvaluations() {
+    this.evaluationService.getMyEvaluations().subscribe({
+      next: (response) => {
+        if (!response.error && response.data) {
+          this.evaluations.set(response.data);
+        }
+        this.loading.set(false);
+      },
+      error: () => {
+        this.loading.set(false);
+      }
+    });
+  }
 }

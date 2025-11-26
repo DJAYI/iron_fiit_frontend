@@ -1,13 +1,22 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
-import { ApiResponse, Client, Trainer, Auditor, CreateClientRequest, UpdateClientRequest, CreateTrainerRequest, UpdateTrainerRequest, CreateAuditorRequest, UpdateAuditorRequest, ClientsListResponse, ClientResponse, TrainersListResponse, TrainerResponse, AuditorsListResponse, AuditorResponse } from '../interfaces';
+import { ApiResponse, Client, Trainer, Auditor, User, CreateClientRequest, UpdateClientRequest, CreateTrainerRequest, UpdateTrainerRequest, CreateAuditorRequest, UpdateAuditorRequest, ClientsListResponse, ClientResponse, TrainersListResponse, TrainerResponse, AuditorsListResponse, AuditorResponse } from '../interfaces';
 
 @Injectable({
     providedIn: 'root'
 })
 export class UserService {
     private api = inject(ApiService);
+
+    // Generic User endpoints
+    getClients(): Observable<ClientsListResponse> {
+        return this.api.get<ClientsListResponse>('/api/clients');
+    }
+
+    getTrainers(): Observable<TrainersListResponse> {
+        return this.api.get<TrainersListResponse>('/api/trainers');
+    }
 
     // CLIENT endpoints
     getAllClients(): Observable<ClientsListResponse> {

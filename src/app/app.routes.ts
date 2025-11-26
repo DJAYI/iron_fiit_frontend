@@ -185,6 +185,22 @@ export const routes: Routes = [
                 loadComponent: () => import('./features/trainers/attendance/trainer-attendance/trainer-attendance').then(m => m.TrainerAttendanceComponent)
             },
             {
+                path: 'evaluations',
+                loadComponent: () => import('./features/trainers/physical-evaluation/physical-evaluation-list').then(m => m.PhysicalEvaluationListComponent)
+            },
+            {
+                path: 'evaluations/new',
+                loadComponent: () => import('./features/trainers/physical-evaluation/physical-evaluation-form').then(m => m.PhysicalEvaluationFormComponent)
+            },
+            {
+                path: 'evaluations/:id',
+                loadComponent: () => import('./features/trainers/physical-evaluation/physical-evaluation-detail').then(m => m.PhysicalEvaluationDetailComponent)
+            },
+            {
+                path: 'evaluations/edit/:id',
+                loadComponent: () => import('./features/trainers/physical-evaluation/physical-evaluation-form').then(m => m.PhysicalEvaluationFormComponent)
+            },
+            {
                 path: '',
                 redirectTo: 'dashboard',
                 pathMatch: 'full'
@@ -216,6 +232,10 @@ export const routes: Routes = [
             {
                 path: 'progress',
                 loadComponent: () => import('./features/clients/client-progress/client-progress-view/client-progress-view').then(m => m.ClientProgressViewComponent)
+            },
+            {
+                path: 'evaluations',
+                loadComponent: () => import('./features/clients/client-progress/client-evaluations/client-evaluations').then(m => m.ClientEvaluationsComponent)
             },
             {
                 path: 'attendance',

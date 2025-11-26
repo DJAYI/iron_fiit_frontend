@@ -6,6 +6,13 @@ export interface AuthUser {
     roles: UserRole[];
 }
 
+export interface User {
+    id: number;
+    name: string;
+    email?: string;
+    username?: string;
+}
+
 export interface ClientsListResponse {
     clients: Client[];
     message: string;
